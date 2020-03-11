@@ -1,10 +1,13 @@
-from time import sleep
+import time
 import json
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 #from pynput.keyboard import Key, Controller
 #import autoit
+
+def sleep(time_to_sleep):
+    time.sleep(time_to_sleep)
 
 def login(user, password):
     passed = False
@@ -44,11 +47,8 @@ with open('auth.json') as json_file:
     user = data['user']
     password = data['password']
 
-mobile_emulation = { "deviceName": "Galaxy S5" }
-opts = webdriver.ChromeOptions()
-opts.add_experimental_option("mobileEmulation", mobile_emulation)
-#opts.add_argument("headless")
-driver = webdriver.Chrome(executable_path=r"./chromedriver",options=opts)
+options = webdriver.ChromeOptions.()add_experimental_option("mobileEmulation", { "deviceName": "Galaxy S5" })
+#options.add_argument("headless")
+driver = webdriver.Chrome(executable_path=r"./chromedriver",options=options)
 driver.get("https://www.instagram.com")
 login(user, password)
-
