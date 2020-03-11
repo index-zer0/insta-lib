@@ -12,10 +12,10 @@ def login(user, password):
         passed = True
         try:
             driver.find_element_by_xpath("//button[contains(text(),'Log In')]").click()
-            sleep(1)
+            sleep(0.5)
         except:
             passed = False
-            sleep(1)
+            sleep(0.5)
     driver.find_element_by_xpath("//input[@name='username']").send_keys(user)
     driver.find_element_by_xpath("//input[@name='password']").send_keys(password)
     driver.find_element_by_xpath("//input[@name='password']").submit()
@@ -26,7 +26,7 @@ def login(user, password):
                 driver.find_element_by_xpath("//button[contains(text(),'Not Now')]").click()
             except:
                 passed-=1
-                sleep(1)
+                sleep(0.5)
             else:
                 passed = 0
     passed = 5
@@ -35,7 +35,7 @@ def login(user, password):
             driver.find_element_by_xpath("//button[contains(text(),'Cancel')]").click()
         except:
             passed-=1
-            sleep(1)
+            sleep(0.5)
         else:
             passed = 0
 
