@@ -1,10 +1,11 @@
+import os
 import time
 import json
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 #from pynput.keyboard import Key, Controller
-#import autoit
+import autoit
 
 def sleep(time_to_sleep):
     time.sleep(time_to_sleep)
@@ -44,31 +45,22 @@ def login(user, password):
 
 def post(image, caption):
     driver.find_element_by_xpath("//div[@role='menuitem']").click()
-    passed = False
-    while passed == False:
-        passed = True
+    passed = 5
+    while passed > 0:
         try:
             autoit.win_active("Open")
-            sleep(0.5)
         except:
-            passed = False
-            sleep(0.5) 
-    passed = False
-    while passed == False:
-        passed = True
-        try:
-            autoit.control_send("Open","Edit1",image) 
+            passed-=1
             sleep(0.5)
-        except:
-            passed = False
-            sleep(0.5) 
+        else:
+            passed = 0
     passed = False
     while passed == False:
         passed = True
         try:
             autoit.control_send("Open","Edit1",image)
             sleep(1)
-        autoit.control_send("Open","Edit1","{ENTER}")
+            autoit.control_send("Open","Edit1","{ENTER}")
             sleep(0.5)
         except:
             passed = False
@@ -98,7 +90,8 @@ def post(image, caption):
             sleep(0.5)
             write_a_caption.send_keys(caption)
             sleep(0.5)
-            share_btn = driver.find_element_by_xpath("//button[contains(text(),'Share')]").click()
+            exit()
+            driver.find_element_by_xpath("//button[contains(text(),'Share')]").click()
         except:
             passed = False
             sleep(0.5)
@@ -115,7 +108,7 @@ options.add_experimental_option("mobileEmulation", { "deviceName": "Galaxy S5" }
 driver = webdriver.Chrome(executable_path=r"./chromedriver",options=options)
 driver.get("https://www.instagram.com")
 login(user, password)
-imagh = os.path.dirname(os.path.abspath(__file__)) + "\\cat.png"
+image = os.path.dirname(os.path.abspath(__file__)) + "\\cat.jpg"
 caption = "picture of a #cat"
 post(image, caption)
 sleep(10)
