@@ -1,9 +1,8 @@
-import os
 import time
-import json
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
+import chromedriver_autoinstaller
 #from pynput.keyboard import Key, Controller
 import autoit
 
@@ -11,6 +10,11 @@ def sleep(time_to_sleep):
     time.sleep(time_to_sleep)
 
 def login(user, password):
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option("mobileEmulation", { "deviceName": "Galaxy S5" })
+    chromedriver_autoinstaller.install()
+    driver = webdriver.Chrome(options=options)
+    driver.get("https://www.instagram.com")
     passed = False
     while passed == False:
         passed = True
@@ -43,21 +47,15 @@ def login(user, password):
         else:
             passed = 0
 
-def post(image, caption):
+def post(user, password, image, caption):
+    login(user, password)
     driver.find_element_by_xpath("//div[@role='menuitem']").click()
-    passed = 5
-    while passed > 0:
-        try:
-            autoit.win_active("Open")
-        except:
-            passed-=1
-            sleep(0.5)
-        else:
-            passed = 0
     passed = False
     while passed == False:
         passed = True
         try:
+            autoit.win_active("Open")
+            sleep(1)
             autoit.control_send("Open","Edit1",image)
             sleep(1)
             autoit.control_send("Open","Edit1","{ENTER}")
@@ -83,33 +81,18 @@ def post(image, caption):
         except:
             passed = False
             sleep(0.5)
+    passed = False
     while passed == False:
         passed = True
         try:
             write_a_caption = driver.find_element_by_xpath("//textarea[@aria-label='Write a caption…']")
-            sleep(0.5)
-            write_a_caption.send_keys(caption)
-            sleep(0.5)
-            exit()
-            driver.find_element_by_xpath("//button[contains(text(),'Share')]").click()
         except:
             passed = False
             sleep(0.5)
-    
-
-with open('auth.json') as json_file:
-    data = json.load(json_file)
-    user = data['user']
-    password = data['password']
-
-options = webdriver.ChromeOptions()
-options.add_experimental_option("mobileEmulation", { "deviceName": "Galaxy S5" })
-#options.add_argument("headless")
-driver = webdriver.Chrome(executable_path=r"./chromedriver",options=options)
-driver.get("https://www.instagram.com")
-login(user, password)
-image = os.path.dirname(os.path.abspath(__file__)) + "\\cat.jpg"
-caption = "picture of a #cat"
-post(image, caption)
-sleep(10)
-driver.close()
+    sleep(0.5)
+    write_a_caption.send_keys(caption)
+    sleep(0.5)
+    exit()
+    driver.find_element_by_xpath("//button[contains(text(),'Share')]").click()
+    sleep(10)
+    driver.close()
