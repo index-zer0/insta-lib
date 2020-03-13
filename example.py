@@ -7,6 +7,9 @@ with open('auth.json') as json_file:
     user = data['user']
     password = data['password']
 
-image = os.path.dirname(os.path.abspath(__file__)) + "\\cat.jpg"
+if os.name == 'nt':
+    image = os.path.dirname(os.path.abspath(__file__)) + "\\cat.jpg"
+else:
+    image = os.path.dirname(os.path.abspath(__file__)) + "/cat.jpg"
 caption = "picture of a #cat"
 post(user, password, image, caption)

@@ -1,10 +1,13 @@
+import os
 import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.action_chains import ActionChains
 import chromedriver_autoinstaller
-#from pynput.keyboard import Key, Controller
-import autoit
+if os.name == 'nt':
+    import autoit
+else:
+    from pynput.keyboard import Key, Controller
 
 def sleep(time_to_sleep):
     time.sleep(time_to_sleep)
@@ -46,20 +49,30 @@ def login(user, password):
             sleep(0.5)
         else:
             passed = 0
+    return driver
 
 def post(user, password, image, caption):
-    login(user, password)
+    if os.name != 'nt':
+        keyboard = Controller()
+    driver = login(user, password)
     driver.find_element_by_xpath("//div[@role='menuitem']").click()
     passed = False
     while passed == False:
         passed = True
         try:
-            autoit.win_active("Open")
-            sleep(1)
-            autoit.control_send("Open","Edit1",image)
-            sleep(1)
-            autoit.control_send("Open","Edit1","{ENTER}")
-            sleep(0.5)
+            if os.name == 'nt':
+                autoit.win_active("Open")
+                sleep(1)
+                autoit.control_send("Open","Edit1",image)
+                sleep(1)
+                autoit.control_send("Open","Edit1","{ENTER}")
+                sleep(0.5)
+            else:
+                keyboard.type(image)
+                sleep(1)
+                keyboard.press(Key.enter)
+                keyboard.release(Key.enter)
+                sleep(0.5)
         except:
             passed = False
             sleep(0.5) 

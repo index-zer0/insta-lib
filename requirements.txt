@@ -1,4 +1,5 @@
 pynput==1.6.8
 selenium==3.141.0
 chromedriver-autoinstaller==0.2.0
+pynput==1.6.8
 pyautoit==0.6.0
